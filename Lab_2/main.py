@@ -1,10 +1,20 @@
 from student import Student
-from Lab_2.faculty import Faculty
+from faculty import Faculty
 from university import University
 from student import StudyField
+from SaveManager import SaveManager
+from sys import exit
+import os
 
 def main_menu():
-    university = University()
+    if os.path.exists("university_data.pkl"):
+        os.remove("university_data.pkl")
+
+    save_manager = SaveManager("university_data.pkl")
+    university = save_manager.load()
+    if university is None:
+     university = University()
+     university.initialize_faculties()
 
     university.add_faculty("Faculty of Mechanical Engineering", "ME", StudyField.MECHANICAL_ENGINEERING)
     university.add_faculty("Faculty of Software Engineering", "SE", StudyField.SOFTWARE_ENGINEERING)
@@ -26,9 +36,10 @@ def main_menu():
         elif choice == "f":
             faculty_operations(university)
         elif choice == "s":
-            student_operations(university)
+            student_operations(university, save_manager)
         elif choice == "q":
             print("Exiting the program.")
+            save_manager.save(university)
             break
         else:
             print("Invalid choice. Please select a valid option.")
@@ -128,7 +139,7 @@ def faculty_operations(university):
             exit()
         else:
             print("Invalid choice. Please select a valid option.")
-def student_operations(university):
+def student_operations(university, save_manager):
     while True:
         print("\nStudent Operations Menu:")
         print("1. Add a student to a faculty")
@@ -152,7 +163,9 @@ def student_operations(university):
             break
         elif choice == "q":
             print("Exiting the program.")
+            save_manager.save(university)
             exit()
+
         else:
             print("Invalid choice. Please select a valid option.")
 
@@ -169,20 +182,18 @@ def create_and_assign_student(university):
 
     faculty_abbreviation = input("Enter the faculty abbreviation: ")
 
-    # Search for the matching faculty by abbreviation
     matching_faculty = Faculty.find_faculty_by_abbreviation(university.faculties, faculty_abbreviation)
 
     if matching_faculty:
         student_info = f"nf/{faculty_abbreviation}/{matching_faculty.faculty_name}/{first_name}/{last_name}/{email}/{birthdate}"
         print(f"Student was successfully added: {student_info}")
 
-        # Create and assign the student to the matching faculty
-        student = Student(first_name, last_name, email, birthdate, faculty, matching_faculty)
-        # Pass faculty directly
+        student = Student(first_name, last_name, email, birthdate, matching_faculty.abbreviation, matching_faculty)
         matching_faculty.add_student(student)
         print(f"Student '{first_name} {last_name}' assigned to {matching_faculty.faculty_name} faculty.")
     else:
         print(f"Faculty with abbreviation '{faculty_abbreviation}' not found.")
+
 
 
 

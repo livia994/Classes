@@ -4,7 +4,7 @@ class Faculty:
     def __init__(self, faculty_name, study_field, abbreviation):
         self.faculty_name = faculty_name
         self.study_field = study_field
-        self.abbreviation = abbreviation  # Added abbreviation
+        self.abbreviation = abbreviation
         self.students_list = []
         self.graduates = []
 
@@ -30,11 +30,10 @@ class Faculty:
     def is_student_enrolled(self, student_email):
         return any(student.email == student_email for student in self.students_list)
 
-    def find_faculty_by_abbreviation(cls, faculties, abbreviation):
+    def find_faculty_by_abbreviation(faculties, abbreviation):
         for faculty in faculties:
             if faculty.abbreviation == abbreviation:
                 return faculty
         return None
-
     def __str__(self):
         return f"{self.faculty_name} ({self.abbreviation})"

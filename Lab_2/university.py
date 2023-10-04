@@ -25,7 +25,6 @@ class University:
             self.faculties.append(faculty)
 
     def get_faculties_by_field(self, study_field):
-        # Retrieve faculties for a specific study field
         return self.faculties_by_field.get(study_field, [])
     def create_faculty(self, faculty_name, field, abbreviation):
         faculty = Faculty(faculty_name, field, abbreviation)

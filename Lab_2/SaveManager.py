@@ -5,8 +5,12 @@ class SaveManager:
         self.filename = filename
 
     def save(self, data):
-        with open(self.filename, 'wb') as file:
-            pickle.dump(data, file)
+        try:
+            with open(self.filename, 'wb') as file:
+                pickle.dump(data, file)
+            print("Data saved successfully!")
+        except Exception as e:
+            print("Error saving data:", str(e))
 
     def load(self):
         try:
