@@ -1,13 +1,14 @@
 import os
 from document import DocumentManager
-current_directory = os.getcwd()
 
+current_directory = os.getcwd()
 folder_name = "Lab #3 OOP"
 
-folder_path = os.path.join(current_directory, folder_name)
+
+folder_path = os.path.join("C:/Users/olivi/OneDrive/Desktop/Lab #3 OOP")
+
 if __name__ == "__main__":
     manager = DocumentManager()
-    folder_path = "your_absolute_path_to_Lab_3_OOP"
 
     while True:
         command = input("Enter a command (commit, info <filename>, status, add <filename>): ").split()

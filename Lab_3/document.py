@@ -79,19 +79,21 @@ class DocumentManager:
         for document in self.documents.values():
             document.update()
 
-    def add_document(self, path):
-        name, ext = os.path.splitext(os.path.basename(path))
-        ext = ext[1:]
-        if ext == 'txt':
-            doc = TextDocument(name, path)
-        elif ext == 'png':
-            doc = ImageDocument(name, path)
-        elif ext == 'py':
-            doc = ProgramDocument(name, path)
+    def add_document(self, path=None):
+        if path:
+            name, ext = os.path.splitext(os.path.basename(path))
+            ext = ext[1:]
+            if ext == 'txt':
+                doc = TextDocument(name, path)
+            elif ext == 'png':
+                doc = ImageDocument(name, path)
+            elif ext == 'py':
+                doc = ProgramDocument(name, path)
+            else:
+                doc = Document(name, path, ext)
+            self.documents[name] = doc  # Store without extension as the key
         else:
-            doc = Document(name, path, ext)
-        self.documents[name] = doc
-
+            pass
     def status(self):
         print(f"Created Snapshot at: {self.snapshot_time}")
         for name, document in self.documents.items():
