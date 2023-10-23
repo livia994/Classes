@@ -47,7 +47,6 @@ class ImageDocument(Document):
         self.image_size = (0, 0)
 
     def update_size(self):
-        # Implement image size retrieval logic for image files (e.g., using PIL for image size)
         pass
 
     def info(self):
@@ -62,7 +61,6 @@ class ProgramDocument(Document):
         self.method_count = 0
 
     def update_counts(self):
-        # Implement code analysis logic for counting lines, classes, and methods
         pass
 
     def info(self):
@@ -83,7 +81,7 @@ class DocumentManager:
 
     def add_document(self, path):
         name, ext = os.path.splitext(os.path.basename(path))
-        ext = ext[1:]  # Remove the leading dot
+        ext = ext[1:]
         if ext == 'txt':
             doc = TextDocument(name, path)
         elif ext == 'png':
