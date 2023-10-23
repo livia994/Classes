@@ -7,17 +7,21 @@ class Document:
         self.path = path
         self.extension = extension
         self.created_time = datetime.datetime.now()
+        self.updated_time = self.created_time
+        self.changes = []
+    def update(self, change_details):
         self.updated_time = datetime.datetime.now()
-
-    def update(self):
-        self.updated_time = datetime.datetime.now()
-
+        self.changes.append((self.updated_time, change_details))
     def info(self):
         print(f"Name: {self.name}")
         print(f"Extension: {self.extension}")
         print(f"Created Time: {self.created_time}")
         print(f"Updated Time: {self.updated_time}")
 
+        if self.changes:
+            print("Changes:")
+            for time, change in self.changes:
+                print(f"- {time}: {change}")
     def has_changed(self, snapshot_time):
         return self.updated_time > snapshot_time
 
@@ -34,12 +38,15 @@ class TextDocument(Document):
             self.line_count = len(lines)
             self.word_count = sum(len(line.split()) for line in lines)
             self.character_count = sum(len(line) for line in lines)
+            self.update("Counts were updated")
 
     def info(self):
         super().info()
+        self.update_counts()
         print(f"Line Count: {self.line_count}")
         print(f"Word Count: {self.word_count}")
         print(f"Character Count: {self.character_count}")
+
 
 class ImageDocument(Document):
     def __init__(self, name, path):
@@ -91,7 +98,8 @@ class DocumentManager:
                 doc = ProgramDocument(name, path)
             else:
                 doc = Document(name, path, ext)
-            self.documents[name] = doc  # Store without extension as the key
+                doc.created_time = datetime.datetime.fromtimestamp(os.path.getctime(path))
+            self.documents[name] = doc
         else:
             pass
     def status(self):
