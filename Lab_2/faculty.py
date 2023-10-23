@@ -1,4 +1,3 @@
-from student import StudyField
 
 class Faculty:
     def __init__(self, faculty_name, study_field, abbreviation):
