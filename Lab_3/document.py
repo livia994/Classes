@@ -9,9 +9,9 @@ class Document:
         self.created_time = datetime.datetime.now()
         self.updated_time = self.created_time
         self.changes = []
-    def update(self, change_details):
+    def update(self, change_details, change_type):
         self.updated_time = datetime.datetime.now()
-        self.changes.append((self.updated_time, change_details))
+        self.changes.append((self.updated_time, change_details, change_type))
     def info(self):
         print(f"Name: {self.name}")
         print(f"Extension: {self.extension}")
@@ -20,8 +20,10 @@ class Document:
 
         if self.changes:
             print("Changes:")
-            for time, change in self.changes:
-                print(f"- {time}: {change}")
+            for time, change, change_type in self.changes:
+                print(f"- {time}: {change_type} - {change}")
+        else:
+            print("No changes.")
     def has_changed(self, snapshot_time):
         return self.updated_time > snapshot_time
 
@@ -31,34 +33,53 @@ class TextDocument(Document):
         self.line_count = 0
         self.word_count = 0
         self.character_count = 0
-
-    def update_counts(self):
+        self.change_history = []
+    def update_counts(self, change_details):
         with open(self.path, 'r') as file:
             lines = file.readlines()
             self.line_count = len(lines)
             self.word_count = sum(len(line.split()) for line in lines)
             self.character_count = sum(len(line) for line in lines)
-            self.update("Counts were updated")
+            self.change_history.append((datetime.datetime.now(), change_details))
 
     def info(self):
         super().info()
-        self.update_counts()
+        self.update_counts("Text change details")
         print(f"Line Count: {self.line_count}")
         print(f"Word Count: {self.word_count}")
         print(f"Character Count: {self.character_count}")
 
+        if self.change_history:
+            print("Text Changes:")
+            for time, change in self.change_history:
+                print(f"- {time}: {change}")
+        else:
+            print("No text changes.")
+
+    def commit(self, message, change_type):
+        super().update(message, change_type)
 
 class ImageDocument(Document):
     def __init__(self, name, path):
         super().__init__(name, path, 'png')
         self.image_size = (0, 0)
+        self.image_changes = []
 
     def update_size(self):
         pass
 
+    def commit(self, message):
+        self.update(message, "Image Change")
+
     def info(self):
         super().info()
         print(f"Image Size: {self.image_size[0]}x{self.image_size[1]}")
+        if self.image_changes:
+            print("Image Changes:")
+            for time, change in self.image_changes:
+                print(f"- {time}: {change}")
+        else:
+            print("No image changes.")
 
 class ProgramDocument(Document):
     def __init__(self, name, path):
@@ -84,7 +105,7 @@ class DocumentManager:
     def commit(self):
         self.snapshot_time = datetime.datetime.now()
         for document in self.documents.values():
-            document.update()
+            document.update("Snapshot", "Snapshot")
 
     def add_document(self, path=None):
         if path:
@@ -102,6 +123,13 @@ class DocumentManager:
             self.documents[name] = doc
         else:
             pass
+
+    def commit(self, filename, message, change_type):
+        if filename in self.documents:
+            document = self.documents[filename]
+            document.update(message, change_type)
+        else:
+            print(f"File not found: {filename}")
     def status(self):
         print(f"Created Snapshot at: {self.snapshot_time}")
         for name, document in self.documents.items():
@@ -109,4 +137,5 @@ class DocumentManager:
                 print(f"{name}.{document.extension} - Changed")
             else:
                 print(f"{name}.{document.extension} - NoChange")
+            document.info()
 
