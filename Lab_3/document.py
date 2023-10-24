@@ -34,13 +34,17 @@ class TextDocument(Document):
         self.word_count = 0
         self.character_count = 0
         self.change_history = []
+
     def update_counts(self, change_details):
-        with open(self.path, 'r') as file:
-            lines = file.readlines()
-            self.line_count = len(lines)
-            self.word_count = sum(len(line.split()) for line in lines)
-            self.character_count = sum(len(line) for line in lines)
-            self.change_history.append((datetime.datetime.now(), change_details))
+        if os.path.exists(self.path):
+            with open(self.path, 'r') as file:
+                lines = file.readlines()
+                self.line_count = len(lines)
+                self.word_count = sum(len(line.split()) for line in lines)
+                self.character_count = sum(len(line) for line in lines)
+                self.change_history.append((datetime.datetime.now(), change_details))
+        else:
+            print(f"File not found: {self.path}")
 
     def info(self):
         super().info()
