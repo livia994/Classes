@@ -93,13 +93,22 @@ class ProgramDocument(Document):
         self.method_count = 0
 
     def update_counts(self):
-        pass
+        with open(self.path, 'r') as file:
+            lines = file.readlines()
+            self.line_count = len(lines)
+            self.count_classes_and_methods(lines)
 
+    def count_classes_and_methods(self, lines):
+        self.class_count = sum(1 for line in lines if 'class ' in line)
+        self.method_count = sum(1 for line in lines if line.strip().startswith('def '))
     def info(self):
         super().info()
+        self.update_counts()
         print(f"Line Count: {self.line_count}")
         print(f"Class Count: {self.class_count}")
         print(f"Method Count: {self.method_count}")
+
+
 
 class DocumentManager:
     def __init__(self):
