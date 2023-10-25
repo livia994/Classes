@@ -58,7 +58,7 @@ class DocumentManagerApp:
                     filename = input("Enter the filename you want to commit changes for: ")
                     message = input("Enter a commit message: ")
                     if filename in self.manager.documents:
-                        self.manager.commit(filename, message, "Text Change")
+                        self.manager.commit(filename, message, "My Commit")
                     else:
                         print(f"File not found: {filename}")
                 elif command[0] == "info" and len(command) == 2:

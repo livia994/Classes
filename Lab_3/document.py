@@ -88,19 +88,15 @@ class ImageDocument(Document):
 class ProgramDocument(Document):
     def __init__(self, name, path):
         super().__init__(name, path, 'py')
-        self.line_count = 0
-        self.class_count = 0
-        self.method_count = 0
+        self.code_changed = False
 
     def update_counts(self):
         with open(self.path, 'r') as file:
             lines = file.readlines()
             self.line_count = len(lines)
-            self.count_classes_and_methods(lines)
+            self.class_count = sum(1 for line in lines if line.strip().startswith('class '))
+            self.method_count = sum(1 for line in lines if line.strip().startswith('def '))
 
-    def count_classes_and_methods(self, lines):
-        self.class_count = sum(1 for line in lines if 'class ' in line)
-        self.method_count = sum(1 for line in lines if line.strip().startswith('def '))
     def info(self):
         super().info()
         self.update_counts()
@@ -108,8 +104,18 @@ class ProgramDocument(Document):
         print(f"Class Count: {self.class_count}")
         print(f"Method Count: {self.method_count}")
 
-
-
+    def commit(self, message, change_type):
+        previous_content = None
+        if os.path.exists(self.path):
+            with open(self.path, 'r') as file:
+                previous_content = file.read()
+        super().update(message, change_type)
+        if previous_content is not None:
+            with open(self.path, 'r') as file:
+                current_content = file.read()
+                if previous_content != current_content:
+                    super().update("Code Change", "Code Change")
+                    self.code_changed = True
 class DocumentManager:
     def __init__(self):
         self.documents = {}
@@ -117,8 +123,7 @@ class DocumentManager:
 
     def commit(self):
         self.snapshot_time = datetime.datetime.now()
-        for document in self.documents.values():
-            document.update("Snapshot", "Snapshot")
+        print("Snapshot committed at:", self.snapshot_time)
 
     def add_document(self, path=None):
         if path:
@@ -151,4 +156,3 @@ class DocumentManager:
             else:
                 print(f"{name}.{document.extension} - NoChange")
             document.info()
-
