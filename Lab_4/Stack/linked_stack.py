@@ -1,9 +1,11 @@
 from abc import ABC, abstractmethod
 
+
 class Node:
     def __init__(self, data):
         self.data = data
         self.next = None
+
 
 class AbstractStack(ABC):
     @abstractmethod
@@ -21,6 +23,7 @@ class AbstractStack(ABC):
     @abstractmethod
     def is_empty(self):
         pass
+
 
 class LinkedStack(AbstractStack):
     def __init__(self):
@@ -43,4 +46,3 @@ class LinkedStack(AbstractStack):
 
     def is_empty(self):
         return self.top_node is None
-
