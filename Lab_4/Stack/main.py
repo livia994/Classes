@@ -28,6 +28,28 @@ def main():
 
         stack_operations(stack)
 
+    elif choice == '2':
+        print("Select Queue implementation:")
+        print("1. List Queue")
+        print("2. Linked Queue")
+        print("3. Array Queue")
+        queue_choice = input("Enter 1, 2, or 3: ")
+
+        if queue_choice == '1':
+            queue = ListQueue()
+        elif queue_choice == '2':
+            queue = LinkedQueue()
+        elif queue_choice == '3':
+            queue = ArrayQueue()
+        else:
+            print("Invalid choice for Queue implementation.")
+            return
+
+        queue_operations(queue)
+
+    else:
+        print("Invalid choice for data structure.")
+
 
 def stack_operations(stack):
     while True:
