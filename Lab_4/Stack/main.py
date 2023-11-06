@@ -87,5 +87,41 @@ def stack_operations(stack):
             print("Invalid operation choice.")
 
 
+def queue_operations(queue):
+    while True:
+        print("Queue Operations:")
+        print("1. Enqueue")
+        print("2. Dequeue")
+        print("3. Front")
+        print("4. Check if Queue is empty")
+        print("5. Exit")
+        operation = input("Enter 1, 2, 3, 4, or 5: ")
+
+        if operation == '1':
+            item = input("Enter item to enqueue: ")
+            queue.enqueue(item)
+        elif operation == '2':
+            dequeued_item = queue.dequeue()
+            if dequeued_item is not None:
+                print(f"Dequeued item: {dequeued_item}")
+            else:
+                print("Queue is empty.")
+        elif operation == '3':
+            front_item = queue.front()
+            if front_item is not None:
+                print(f"Front item: {front_item}")
+            else:
+                print("Queue is empty.")
+        elif operation == '4':
+            if queue.is_empty():
+                print("Queue is empty.")
+            else:
+                print("Queue is not empty.")
+        elif operation == '5':
+            break
+        else:
+            print("Invalid operation choice.")
+
+
 if __name__ == "__main__":
     main()
