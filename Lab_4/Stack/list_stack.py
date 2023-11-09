@@ -1,22 +1,4 @@
-from abc import ABC, abstractmethod
-
-
-class AbstractStack(ABC):
-    @abstractmethod
-    def push(self, item):
-        pass
-
-    @abstractmethod
-    def pop(self):
-        pass
-
-    @abstractmethod
-    def top(self):
-        pass
-
-    @abstractmethod
-    def is_empty(self):
-        pass
+from abstract_stack import AbstractStack
 
 class ListStack(AbstractStack):
     def __init__(self):
@@ -35,3 +17,6 @@ class ListStack(AbstractStack):
 
     def is_empty(self):
         return len(self.stack) == 0
+
+    def is_full(self):
+        return False  # ListStack is not restricted by capacity

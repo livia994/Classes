@@ -1,9 +1,6 @@
 from list_stack import ListStack
 from linked_stack import LinkedStack
 from array_stack import ArrayStack
-from ListQueue import ListQueue
-
-
 
 def main():
     print("Select data structure:")
@@ -34,7 +31,7 @@ def main():
         print("Select Queue implementation:")
         print("1. List Queue")
         print("2. Linked Queue")
-        print("3. Array Queue")
+        print("3. Array Up Queue")
         queue_choice = input("Enter 1, 2, or 3: ")
 
         if queue_choice == '1':
@@ -42,7 +39,7 @@ def main():
         elif queue_choice == '2':
             queue = LinkedQueue()
         elif queue_choice == '3':
-            queue = ArrayQueue()
+            queue = ArrayUpQueue()
         else:
             print("Invalid choice for Queue implementation.")
             return
@@ -51,7 +48,6 @@ def main():
 
     else:
         print("Invalid choice for data structure.")
-
 
 def stack_operations(stack):
     while True:
@@ -88,7 +84,6 @@ def stack_operations(stack):
         else:
             print("Invalid operation choice.")
 
-
 def queue_operations(queue):
     while True:
         print("Queue Operations:")
@@ -123,7 +118,6 @@ def queue_operations(queue):
             break
         else:
             print("Invalid operation choice.")
-
 
 if __name__ == "__main__":
     main()

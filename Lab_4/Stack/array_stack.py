@@ -1,32 +1,16 @@
-from abc import ABC, abstractmethod
-
-class AbstractStack(ABC):
-    @abstractmethod
-    def push(self, item):
-        pass
-
-    @abstractmethod
-    def pop(self):
-        pass
-
-    @abstractmethod
-    def top(self):
-        pass
-
-    @abstractmethod
-    def is_empty(self):
-        pass
+from abstract_stack import AbstractStack
 
 class ArrayStack(AbstractStack):
-    def __init__(self, capacity=10):
+    def __init__(self, capacity=5):
         self.stack = [None] * capacity
         self.size = 0
 
     def push(self, item):
-        if self.size == len(self.stack):
-            self._resize()
-        self.stack[self.size] = item
-        self.size += 1
+        if not self.is_full():
+            self.stack[self.size] = item
+            self.size += 1
+        else:
+            print("Stack is full. Cannot push element.")
 
     def pop(self):
         if not self.is_empty():
@@ -40,8 +24,5 @@ class ArrayStack(AbstractStack):
     def is_empty(self):
         return self.size == 0
 
-    def _resize(self):
-        new_stack = [None] * (2 * len(self.stack))
-        for i in range(self.size):
-            new_stack[i] = self.stack[i]
-        self.stack = new_stack
+    def is_full(self):
+        return self.size == len(self.stack)
