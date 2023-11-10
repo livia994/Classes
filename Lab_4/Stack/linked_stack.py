@@ -28,4 +28,4 @@ class LinkedStack(AbstractStack):
         return self.top_node is None
 
     def is_full(self):
-        return False  # LinkedStack is not restricted by capacity
+        return False
