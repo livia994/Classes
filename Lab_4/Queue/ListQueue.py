@@ -1,4 +1,25 @@
-from abstract_queue import AbstractQueue
+from abc import ABC, abstractmethod
+
+class AbstractQueue(ABC):
+    @abstractmethod
+    def enqueue(self, item):
+        pass
+
+    @abstractmethod
+    def dequeue(self):
+        pass
+
+    @abstractmethod
+    def front(self):
+        pass
+
+    @abstractmethod
+    def is_empty(self):
+        pass
+
+    @abstractmethod
+    def is_full(self):
+        pass
 
 class ListQueue(AbstractQueue):
     def __init__(self):
